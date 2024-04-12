@@ -1,26 +1,35 @@
 const connection = require('../config/db');
 const dotenv = require('dotenv').config();
-
-async function storeTask(request, response) {
-
-    const params = Array (
+ 
+async function storeTask(request, response ){
+   
+    const params = Array(
         request.body.title,
         request.body.description,
     );
-      
-    const quarry = "INSERT INTO db_tasks(title,description) VALUES(?,?)";
-
-    connection.quarry(quarry, params, (err, results) => {
-        if(results) {
-        response
-            .status(201)
-            .json({
-                success: true,
-                message: "sucesso",
-                data: results
-            })
+ 
+    const query = "INSERT INTO suber(email,nome) VALUES(?,?)";
+ 
+    connection.query(query, params, (err, results) => {
+        if (results) {
+            response
+                .status(201)
+                .json({
+                    success: true,
+                    message: "Sucesso",
+                    data: results
+                })
+        } else {
+            response
+                .status(400)
+                .json({
+                    success: false,
+                    message: "Ops, deu problema",
+                })
         }
     })
-
 }
-
+ 
+module.exports = {
+    storeTask
+}
